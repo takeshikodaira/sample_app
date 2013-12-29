@@ -84,4 +84,16 @@ describe User do
       it {should be_invalid}
     end
   end
+
+  describe "メールアドレスが小文字で保存されているか" do
+    let(:mixed_case_email){"Foo@ExAmPlE.cOM"}
+    it "should be saved as all lower-case" do
+      @user.email = mixed_case_email
+      @user.save
+      expect(@user.reload.email).to eq mixed_case_email.downcase
+    end
+  end
+
+
+
 end
