@@ -20,6 +20,14 @@ module SessionsHelper
     user == current_user
   end
 
+  def signed_in_user
+    #訪れた時にログインしていない場合はそのURLを記憶させる
+    unless signed_in?
+      store_location
+      redirect_to signin_url, notice: "Please sign in."
+    end
+  end
+
   def signed_in?
     !current_user.nil?
   end

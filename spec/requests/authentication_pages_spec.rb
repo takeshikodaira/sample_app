@@ -70,6 +70,20 @@ describe "認証画面の" do
               expect(page).to have_title('Edit user')
             end
           end
+
+          describe "もう一度ログインしたとき" do
+            before do
+              delete signout_path
+              visit signin_path
+              fill_in "Email", with: user.email
+              fill_in "Password", with: user.password
+              click_button "Sign in"
+            end
+            it "転送先が消えてデフォルトのページ(プロフィール)に行くべき" do
+              expect(page).to have_title(user.name)
+            end
+          end
+
         end
 
         describe "Usersコントローラーの" do
@@ -87,9 +101,19 @@ describe "認証画面の" do
             before {visit users_path}
             it {should have_title('Sign in')}
           end
-
-
         end
+
+        describe "Micropostsコントローラーの" do
+          describe "createアクションを送信" do
+            before {post microposts_path}
+            specify {expect(response).to redirect_to(signin_path)}
+          end
+          describe "destroyアクションを送信" do
+            before {delete micropost_path(FactoryGirl.create(:micropost))}
+            specify {expect(response).to redirect_to(signin_path)}
+          end
+        end
+
       end
 
       describe "別のユーザーとして" do
