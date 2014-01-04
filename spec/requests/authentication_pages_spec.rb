@@ -101,6 +101,27 @@ describe "認証画面の" do
             before {visit users_path}
             it {should have_title('Sign in')}
           end
+
+          describe "followingページを開く" do
+            before {visit following_user_path(user)}
+            it {should have_title('Sign in')}
+          end
+
+          describe "followersページを開く" do
+            before {visit followers_user_path(user)}
+            it {should have_title('Sign in')}
+          end
+        end
+
+        describe "Relationshipコントローラーの" do
+          describe "createアクションを送信" do
+            before {post relationships_path}
+            specify {expect(response).to redirect_to(signin_path)}
+          end
+          describe "destroyアクションを送信" do
+            before {delete relationship_path(1)}
+            specify {expect(response).to redirect_to(signin_path)}
+          end
         end
 
         describe "Micropostsコントローラーの" do
